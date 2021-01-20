@@ -20,7 +20,7 @@
 //// TODO: put your name in the string               
 /////////////////////////////////////////////////////////////////////
 
-const std::string author="name";
+const std::string author="Andres Hernandez";
 
 /////////////////////////////////////////////////////////////////////
 //// These are helper functions we created to generate circles and triangles by testing whether a point is inside the shape or not.
@@ -38,7 +38,7 @@ const std::string draw_pixels = To_String(
 const float M_PI = 3.1415926535; 
 
 // The side length of the minimum unit (or the new "pixels")
-const float PIXEL_SIZE = 10.; 
+const float PIXEL_SIZE = 2.; 
 
 // To check if a point is inside a circle
 bool inCircle(vec2 p, vec2 center, float radius) {
@@ -68,6 +68,32 @@ vec2 polar2cart(float angle, float length) {
 // Feel free to add more functions if needed!                          
 /////////////////////////////////////////////////////////////////////////
 
+/*
+* Function: inEllipse
+* Description: Determines whether a point is inside an ellipse rotated about an angle
+*
+* Params:
+* [in] poi: Point of interest
+* [in] center: The Center of the ellipse
+* [in] s_radius: The shorter radius
+* [in] l_radius: The longer radius
+* [in] angle: The angle about which the ellipse is rotated
+*
+* Returns: True if the point is inside the ellipse. False if not.
+*/
+bool inEllipse(vec2 poi, vec2 center, float s_radius, float l_radius, float angle) {
+	float num1 = pow(cos(angle) * (poi.x - center.x) + sin(angle) * (poi.y - center.y), 2.);
+	float num2 = pow(sin(angle) * (poi.x - center.x) + cos(angle) * (poi.y - center.y), 2.);
+	float den1 = pow(s_radius, 2.);
+	float den2 = pow(l_radius, 2.);
+
+
+	if ((num1 / den1) + (num2 / den2) <= 1.) {
+		return true;
+	}
+	return false;
+}
+
 /////////////////////////////////////////////////////////////////////
 // TODO: replace the code below with your own code                 //
 // Useful variables:											   //
@@ -78,22 +104,17 @@ vec2 polar2cart(float angle, float length) {
 // Return the rgba color of the grid at position (x, y) 
 vec4 paintGrid(float x, float y) {
 	vec2 center = vec2(iResolution / PIXEL_SIZE / 2.); // window center
-	vec2 p1 = polar2cart(iTime, 16.) + center;
-	vec2 p2 = polar2cart(iTime + 2. * M_PI / 3., 16.) + center;
-	vec2 p3 = polar2cart(iTime + 4. * M_PI / 3., 16.) + center;
-	vec2 p4 = polar2cart(iTime + M_PI / 3., 16.) + center;
-	vec2 p5 = polar2cart(iTime + M_PI, 16.) + center;
-	vec2 p6 = polar2cart(iTime + 5. * M_PI / 3., 16.) + center;
-	bool inTrangle1 = inTriangle(vec2(x, y), p1, p2, p3);
-	bool inTrangle2 = inTriangle(vec2(x, y), p4, p5, p6);
-	if (inTrangle1 && inTrangle2) {
-		return vec4(1.0);
-	}
-	else if (inTrangle1 || inTrangle2) {
-		return vec4(vec3(217, 249, 255) / 255., 1.); 
+	vec4 cat_color = vec4(vec3(190, 190, 190) / 255., 1.); // Cat head color
+	vec4 background_color = vec4(vec3(200, 200, 255) / 255., 1.); // Background color
+
+	float cat_head_s_radius = 150.;
+	float cat_head_l_radius = 170.;
+
+	if (inEllipse(vec2(x, y), vec2(center.x, center.y - 10.), cat_head_l_radius, cat_head_s_radius, 0.)) {
+		return cat_color;
 	}
 	else {
-		return vec4(vec3(184, 243, 255) / 255., 1.);
+		return background_color;
 	}
 }
 

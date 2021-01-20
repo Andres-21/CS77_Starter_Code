@@ -104,15 +104,33 @@ bool inEllipse(vec2 poi, vec2 center, float s_radius, float l_radius, float angl
 // Return the rgba color of the grid at position (x, y) 
 vec4 paintGrid(float x, float y) {
 	vec2 center = vec2(iResolution / PIXEL_SIZE / 2.); // window center
+
+	// Colors used for the image
 	vec4 cat_color = vec4(vec3(190, 190, 190) / 255., 1.); // Cat head color
 	vec4 background_color = vec4(vec3(200, 200, 255) / 255., 1.); // Background color
+	vec4 black_color = vec4(vec3(0, 0, 0) / 255., 1.); // Black color
 
+	// Frequently used variables
 	float cat_head_s_radius = 150.;
 	float cat_head_l_radius = 170.;
 
+	// Cat head main
 	if (inEllipse(vec2(x, y), vec2(center.x, center.y - 10.), cat_head_l_radius, cat_head_s_radius, 0.)) {
 		return cat_color;
 	}
+	// Cat head outline
+	else if (inEllipse(vec2(x, y), vec2(center.x, center.y - 10.), cat_head_l_radius + 5., cat_head_s_radius + 5., 0.)) {
+		return black_color;
+	}
+	// Right ear main
+	else if (inTriangle(vec2(x, y), vec2(center.x + 40., center.y + 140.), vec2(center.x + 160., center.y + 50.), vec2(center.x + 200., center.y + 210.))) {
+		return cat_color;
+	}
+	// Right ear outline
+	else if (inTriangle(vec2(x, y), vec2(center.x + 35., center.y + 140.), vec2(center.x + 165., center.y + 45.), vec2(center.x + 205., center.y + 215.))) {
+		return black_color;
+	}
+	// Background color
 	else {
 		return background_color;
 	}

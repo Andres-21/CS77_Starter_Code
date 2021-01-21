@@ -105,17 +105,34 @@ bool inEllipse(vec2 poi, vec2 center, float s_radius, float l_radius, float angl
 vec4 paintGrid(float x, float y) {
 	vec2 center = vec2(iResolution / PIXEL_SIZE / 2.); // window center
 	vec2 low_center = vec2(center.x, center.y - 75.); // window lower center
+	vec2 cup_center = vec2(center.x, center.y + 60.); // cup center
 
 	// Colors used for the image
 	vec4 lightest_blue = vec4(vec3(230, 240, 255) / 255., 1.); // Lightest blue in image
 	vec4 med_blue = vec4(vec3(220, 230, 245) / 255., 1.); // Medium shade of blue in image
 	vec4 darkest_blue = vec4(vec3(180, 190, 205) / 255., 1.); // Darkest shade of blue in image
-	vec4 background_color = vec4(vec3(250, 245, 240) / 255., 1.); // Background color
+	vec4 background_color = vec4(vec3(100, 105, 100) / 255., 1.); // Background color
 	vec4 black_color = vec4(vec3(0, 0, 0) / 255., 1.); // Black color
 	vec4 white_color = vec4(vec3(250, 250, 250) / 255., 1.); // White color
 	
+	// Liquid
+	if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 20.), 120., 45., 0.)) {
+		return black_color;
+	}
+	// Cup lip
+	else if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 10.), 130., 60., 0.)) {
+		return lightest_blue;
+	}
+	// Erase upper ellipse
+	else if (inTriangle(vec2(x, y), vec2(0., cup_center.y+10.), vec2(cup_center.x * 2., cup_center.y+10.), vec2(cup_center.x, cup_center.y * 4.))) {
+		return background_color;
+	}
+	// Cup body
+	else if (inEllipse(vec2(x, y), cup_center, 150., 130., M_PI/2.)) {
+		return lightest_blue;
+	}
 	// Dish inner outline
-	if (inEllipse(vec2(x, y), low_center, 100., 30., 0.)) {
+	else if (inEllipse(vec2(x, y), low_center, 100., 40., 0.)) {
 		return darkest_blue;
 	}
 	// Dish second outer outline

@@ -104,31 +104,27 @@ bool inEllipse(vec2 poi, vec2 center, float s_radius, float l_radius, float angl
 // Return the rgba color of the grid at position (x, y) 
 vec4 paintGrid(float x, float y) {
 	vec2 center = vec2(iResolution / PIXEL_SIZE / 2.); // window center
+	vec2 low_center = vec2(center.x, center.y - 75.); // window lower center
 
 	// Colors used for the image
-	vec4 cat_color = vec4(vec3(190, 190, 190) / 255., 1.); // Cat head color
-	vec4 background_color = vec4(vec3(200, 200, 255) / 255., 1.); // Background color
+	vec4 lightest_blue = vec4(vec3(230, 240, 255) / 255., 1.); // Lightest blue in image
+	vec4 med_blue = vec4(vec3(220, 230, 245) / 255., 1.); // Medium shade of blue in image
+	vec4 darkest_blue = vec4(vec3(180, 190, 205) / 255., 1.); // Darkest shade of blue in image
+	vec4 background_color = vec4(vec3(250, 245, 240) / 255., 1.); // Background color
 	vec4 black_color = vec4(vec3(0, 0, 0) / 255., 1.); // Black color
-
-	// Frequently used variables
-	float cat_head_s_radius = 150.;
-	float cat_head_l_radius = 170.;
-
-	// Cat head main
-	if (inEllipse(vec2(x, y), vec2(center.x, center.y - 10.), cat_head_l_radius, cat_head_s_radius, 0.)) {
-		return cat_color;
+	vec4 white_color = vec4(vec3(250, 250, 250) / 255., 1.); // White color
+	
+	// Dish inner outline
+	if (inEllipse(vec2(x, y), low_center, 100., 30., 0.)) {
+		return darkest_blue;
 	}
-	// Cat head outline
-	else if (inEllipse(vec2(x, y), vec2(center.x, center.y - 10.), cat_head_l_radius + 5., cat_head_s_radius + 5., 0.)) {
-		return black_color;
+	// Dish second outer outline
+	else if (inEllipse(vec2(x, y), low_center, 190., 80., 0.)) {
+		return med_blue;
 	}
-	// Right ear main
-	else if (inTriangle(vec2(x, y), vec2(center.x + 40., center.y + 140.), vec2(center.x + 160., center.y + 50.), vec2(center.x + 200., center.y + 210.))) {
-		return cat_color;
-	}
-	// Right ear outline
-	else if (inTriangle(vec2(x, y), vec2(center.x + 35., center.y + 140.), vec2(center.x + 165., center.y + 45.), vec2(center.x + 205., center.y + 215.))) {
-		return black_color;
+	// Dish outer outline
+	else if (inEllipse(vec2(x, y), low_center, 200., 90., 0.)) {
+		return lightest_blue;
 	}
 	// Background color
 	else {

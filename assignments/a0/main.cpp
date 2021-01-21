@@ -108,27 +108,89 @@ vec4 paintGrid(float x, float y) {
 	vec2 cup_center = vec2(center.x, center.y + 60.); // cup center
 
 	// Colors used for the image
-	vec4 lightest_blue = vec4(vec3(230, 240, 255) / 255., 1.); // Lightest blue in image
-	vec4 med_blue = vec4(vec3(220, 230, 245) / 255., 1.); // Medium shade of blue in image
-	vec4 darkest_blue = vec4(vec3(180, 190, 205) / 255., 1.); // Darkest shade of blue in image
-	vec4 background_color = vec4(vec3(100, 105, 100) / 255., 1.); // Background color
+	vec4 lightest_blue = vec4(vec3(210, 223, 255) / 255., 1.); // Lightest blue in image
+	vec4 med_blue = vec4(vec3(174, 195, 249) / 255., 1.); // Medium shade of blue in image
+	vec4 darkest_blue = vec4(vec3(144, 157, 191) / 255., 1.); // Darkest shade of blue in image
+	vec4 background_color = vec4(vec3(234, 193, 193) / 255., 1.); // Background color
 	vec4 black_color = vec4(vec3(0, 0, 0) / 255., 1.); // Black color
 	vec4 white_color = vec4(vec3(250, 250, 250) / 255., 1.); // White color
-	
+	vec4 liquid_color = vec4(vec3(64, 48, 40) / 255., 1.); // Liquid color
+	vec4 cookie_color = vec4(vec3(169, 135, 107) / 255., 1.); // Cookie color
+
+	// Chocolate chip 1
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 70., low_center.y - 45.), 10., 5., -M_PI / 45.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 2
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 140., low_center.y - 25.), 11., 5., M_PI / 20.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 3
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 110., low_center.y - 45.), 12., 6., M_PI / 45.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 4
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 160., low_center.y + 20.), 10., 5., M_PI / 1.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 5
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 180., low_center.y), 10., 5., -M_PI / 45.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 6
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 90., low_center.y - 20.), 10., 5., M_PI / 1.)) {
+		return liquid_color;
+	}
+	// Chocolate chip 7
+	if (inEllipse(vec2(x, y), vec2(low_center.x - 130., low_center.y + 10.), 10., 5., M_PI / 55.)) {
+		return liquid_color;
+	}
+	// Cookie 1
+	else if (inEllipse(vec2(x, y), vec2(low_center.x - 100., low_center.y - 40.), 60., 35., M_PI / 45.)) {
+		return cookie_color;
+	}
+	// Cookie 1 outline
+	else if (inEllipse(vec2(x, y), vec2(low_center.x - 100., low_center.y - 38.), 60., 35., M_PI / 45.)) {
+		return liquid_color;
+	}
+	// Cookie 2
+	else if (inEllipse(vec2(x, y), vec2(low_center.x - 150., low_center.y), 60., 30., M_PI / 55.)) {
+		return cookie_color;
+	}
+	// Cookie 2 outline
+	else if (inEllipse(vec2(x, y), vec2(low_center.x - 150., low_center.y - 2.), 60., 30., M_PI / 55.)) {
+		return liquid_color;
+	}
 	// Liquid
-	if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 20.), 120., 45., 0.)) {
-		return black_color;
+	else if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 15.), 120., 35., 0.)) {
+		return liquid_color;
+	}
+	// Back of Inner Lip
+	else if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 20.), 120., 40., 0.)) {
+		return darkest_blue;
 	}
 	// Cup lip
-	else if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 10.), 130., 60., 0.)) {
+	else if (inEllipse(vec2(x, y), vec2(cup_center.x, cup_center.y + 10.), 130., 55., 0.)) {
 		return lightest_blue;
 	}
 	// Erase upper ellipse
-	else if (inTriangle(vec2(x, y), vec2(0., cup_center.y+10.), vec2(cup_center.x * 2., cup_center.y+10.), vec2(cup_center.x, cup_center.y * 4.))) {
+	else if (inTriangle(vec2(x, y), vec2(0., cup_center.y + 10.), vec2(cup_center.x * 3., cup_center.y + 10.), vec2(cup_center.x, cup_center.y * 4.))) {
 		return background_color;
 	}
 	// Cup body
-	else if (inEllipse(vec2(x, y), cup_center, 150., 130., M_PI/2.)) {
+	else if (inEllipse(vec2(x, y), cup_center, 150., 130., M_PI / 2.)) {
+		return lightest_blue;
+	}
+	// Cup handle negative 
+	else if (inCircle(vec2(x, y), vec2(cup_center.x + 132., cup_center.y - 40.), 38.)) {
+		return background_color;
+	}
+	// Cup handle shadow 
+	else if (inCircle(vec2(x, y), vec2(cup_center.x + 132., cup_center.y - 38.), 41.)) {
+		return darkest_blue;
+	}
+	// Cup handle body
+	else if (inCircle(vec2(x, y), vec2(cup_center.x + 130., cup_center.y - 40.), 50.)) {
 		return lightest_blue;
 	}
 	// Dish inner outline
@@ -136,11 +198,11 @@ vec4 paintGrid(float x, float y) {
 		return darkest_blue;
 	}
 	// Dish second outer outline
-	else if (inEllipse(vec2(x, y), low_center, 190., 80., 0.)) {
+	else if (inEllipse(vec2(x, y), low_center, 190., 70., 0.)) {
 		return med_blue;
 	}
 	// Dish outer outline
-	else if (inEllipse(vec2(x, y), low_center, 200., 90., 0.)) {
+	else if (inEllipse(vec2(x, y), low_center, 200., 80., 0.)) {
 		return lightest_blue;
 	}
 	// Background color
